@@ -90,6 +90,32 @@ Token Lexer::nextToken() {
   }
 
   char c = peek();
+// 'teste''teste'
+// 'teste'
+// ''
+// 'teste'''
+  if (c == '\'') {
+    advance();
+    char curr = advance();
+    
+    size_t initPos = pos;
+    int startColumn = column;
+    std::string literalContent;
+    char peek1 = peek();
+    while(curr != '\'' || (curr == '\'' && peek() == '\'')) {
+      char peek2 = peek();
+      if (curr == '\r' || curr == '\n')
+        return Token(TokenType::INVALID, std::string(1, c), line, column);
+
+      if (curr == '\'' && peek() == '\'') advance();
+
+      curr = advance();
+      literalContent += curr;
+    }
+      size_t len = pos - initPos;
+      //literalContent += source.substr(initPos+1, len);
+      return Token(TokenType::STANDARD_ALPHANUM, literalContent, line, startColumn);
+  }
 
   if (std::isalpha(c)) {
     return identifier();
