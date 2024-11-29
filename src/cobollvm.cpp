@@ -14,6 +14,7 @@ std::string tokenTypeToString(TokenType type) {
     case TokenType::PERIOD: return "PERIOD";
     case TokenType::END_OF_FILE: return "EOF";
     case TokenType::INVALID: return "INVALID";
+    case TokenType::STANDARD_ALPHANUM: return "STANDARD_ALPHANUM";
     default: return "UNKNOWN";
   }
 }
@@ -24,6 +25,9 @@ int main() {
   std::string input = R"(
     IDENTIFICATION DIVISION.
     PROGRAM_ID. HELLO.
+    'teste'''.
+    '''teste'.
+    ''.
     DATA DIVISION.
     PROCEDURE DIVISION.
   )";
@@ -35,8 +39,8 @@ int main() {
     Token token = lexer.nextToken();
 
     std::cout << "Token: " << tokenTypeToString(token.type)
-      << " | Lexeme: '" << token.lexeme
-      << "' | Line: " << token.line
+      << " | Lexeme: \"" << token.lexeme
+      << "\" | Line: " << token.line
       << " | Column: " << token.column << std::endl;
 
     if (token.type == TokenType::END_OF_FILE) break;
