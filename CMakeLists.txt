@@ -7,6 +7,6 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 # Add executable
 add_executable(cobollvm 
-    src/main.cpp
+    src/cobollvm.cpp
     src/lexer.cpp
 )
