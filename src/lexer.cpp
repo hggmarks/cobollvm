@@ -45,9 +45,9 @@ bool Lexer::isAtEnd() const {
 }
 
 Token Lexer::alphanumLiteral(char strDelimiter) {
-    advance();
-    int startColumn = column;
     std::string literalContent;
+    literalContent += advance();
+    int startColumn = column;
 
     char curr = advance();
     while (curr != strDelimiter || (curr == strDelimiter && peek() == strDelimiter)) {
@@ -64,8 +64,10 @@ Token Lexer::alphanumLiteral(char strDelimiter) {
         literalContent += curr;
       }
 
-      curr = advance();
+     curr = advance();
     }
+
+    literalContent += curr;
 
     return Token(TokenType::STANDARD_ALPHANUM, literalContent, line, startColumn);
 
@@ -117,10 +119,6 @@ Token Lexer::nextToken() {
   }
 
   char c = peek();
-// 'teste''teste'
-// 'teste'
-// ''
-// 'teste'''
   if (c == '\'') {
     return alphanumLiteral('\'');
   }
