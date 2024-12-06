@@ -66,6 +66,7 @@ private:
   bool isAtEnd() const;
 
   Token identifier();
+  Token alphanumLiteral(char delimiter);
   Token number();
 
   bool isValidPosition() const {

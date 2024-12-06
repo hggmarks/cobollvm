@@ -27,7 +27,12 @@ int main() {
     PROGRAM_ID. HELLO.
     'teste'''.
     '''teste'.
-    ''.
+    ''''''.
+    'tes''te'.
+    "teste""".
+    """teste".
+    """""".
+    "tes""x""te".
     DATA DIVISION.
     PROCEDURE DIVISION.
   )";

@@ -44,6 +44,33 @@ bool Lexer::isAtEnd() const {
   return pos >= source.length();
 }
 
+Token Lexer::alphanumLiteral(char strDelimiter) {
+    advance();
+    int startColumn = column;
+    std::string literalContent;
+
+    char curr = advance();
+    while (curr != strDelimiter || (curr == strDelimiter && peek() == strDelimiter)) {
+
+      if (curr == '\r' || curr == '\n') {
+        return Token(TokenType::INVALID, std::string(1, curr), line, column);
+      }
+
+
+      if (curr == strDelimiter && peek() == strDelimiter) {
+        advance();
+        literalContent += strDelimiter;
+      } else {
+        literalContent += curr;
+      }
+
+      curr = advance();
+    }
+
+    return Token(TokenType::STANDARD_ALPHANUM, literalContent, line, startColumn);
+
+}
+
 Token Lexer::identifier() {
   int startColumn = column;
     std::string result;
@@ -95,26 +122,11 @@ Token Lexer::nextToken() {
 // ''
 // 'teste'''
   if (c == '\'') {
-    advance();
-    char curr = advance();
-    
-    size_t initPos = pos;
-    int startColumn = column;
-    std::string literalContent;
-    char peek1 = peek();
-    while(curr != '\'' || (curr == '\'' && peek() == '\'')) {
-      char peek2 = peek();
-      if (curr == '\r' || curr == '\n')
-        return Token(TokenType::INVALID, std::string(1, c), line, column);
+    return alphanumLiteral('\'');
+  }
 
-      if (curr == '\'' && peek() == '\'') advance();
-
-      curr = advance();
-      literalContent += curr;
-    }
-      size_t len = pos - initPos;
-      //literalContent += source.substr(initPos+1, len);
-      return Token(TokenType::STANDARD_ALPHANUM, literalContent, line, startColumn);
+  if (c == '\"') {
+    return alphanumLiteral('\"');
   }
 
   if (std::isalpha(c)) {
